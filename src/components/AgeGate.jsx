@@ -30,7 +30,7 @@ function AgeGate() {
             Are you 21 years of age or older?
           </Typography>
           <Typography variant="body1" paragraph>
-            This website contains adult content and is only suitable for those 21 years or older.
+            This website contains cannabis products and is only suitable for those 21 years or older.
           </Typography>
           <div className="age-gate-buttons">
             <Button 
