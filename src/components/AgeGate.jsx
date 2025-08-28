@@ -1,59 +1,55 @@
-import { useState } from 'react';
-import { Button, Dialog, DialogContent, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import './AgeGate.css';
 
-function AgeGate() {
-  const [isVerified, setIsVerified] = useState(
-    localStorage.getItem('ageVerified') === 'true'
-  );
-  const [open, setOpen] = useState(!isVerified);
+const AgeGate = () => {
+  const [verified, setVerified] = useState(() => {
+    return localStorage.getItem('ageVerified') === 'true';
+  });
 
-  const verifyAge = () => {
-    localStorage.setItem('ageVerified', 'true');
-    setIsVerified(true);
-    setOpen(false);
+  useEffect(() => {
+    if (!verified) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [verified]);
+
+  const handleVerification = (isVerified) => {
+    if (isVerified) {
+      localStorage.setItem('ageVerified', 'true');
+      setVerified(true);
+    } else {
+      window.location.href = 'https://www.google.com';
+    }
   };
 
-  const exitSite = () => {
-    window.location.href = 'https://www.google.com';
-  };
-
-  if (isVerified) return null;
+  if (verified) return null;
 
   return (
-    <Dialog open={open} fullScreen>
-      <DialogContent className="age-gate">
-        <div className="age-gate-content">
-          <Typography variant="h4" gutterBottom>
-            Welcome to Pot Express
-          </Typography>
-          <Typography variant="h6" gutterBottom>
-            Are you 21 years of age or older?
-          </Typography>
-          <Typography variant="body1" paragraph>
-            This website contains cannabis products and is only suitable for those 21 years or older.
-          </Typography>
-          <div className="age-gate-buttons">
-            <Button 
-              variant="contained" 
-              color="primary" 
-              size="large"
-              onClick={verifyAge}
-            >
-              Yes, I'm 21+
-            </Button>
-            <Button 
-              variant="outlined" 
-              color="secondary" 
-              size="large"
-              onClick={exitSite}
-            >
-              No, I'm Under 21
-            </Button>
-          </div>
+    <div className="compliance-overlay">
+      <div className="compliance-modal">
+        <h2>Age Verification</h2>
+        <p>This website contains cannabis products and is only suitable for those 21 years or older.</p>
+        <div className="compliance-buttons">
+          <button 
+            className="compliance-confirm"
+            onClick={() => handleVerification(true)}
+          >
+            I am 21 or older
+          </button>
+          <button 
+            className="compliance-deny"
+            onClick={() => handleVerification(false)}
+          >
+            I am under 21
+          </button>
         </div>
-      </DialogContent>
-    </Dialog>
+        <p className="compliance-disclaimer">
+          By entering this site, you agree to our Terms of Service and Privacy Policy
+        </p>
+      </div>
+    </div>
   );
-}
+};
 
 export default AgeGate;
